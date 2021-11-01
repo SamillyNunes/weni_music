@@ -1,19 +1,73 @@
-from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from .serializers import MusicSerializer, ArtistSerializer, PlaylistSerializer
 from .models import MusicModel, ArtistModel, PlaylistModel
 
 
-class MusicViewSet(viewsets.ModelViewSet):
-    queryset = MusicModel.objects.all().order_by('title')
-    serializer_class = MusicSerializer
+class MusicAPIView(APIView):
+    """
+    API que provê as músicas
+    """
+
+    def get(self, request, pk=None):
+        # Caso o id não seja nulo, significa que é para retornar apenas a música selecionada
+        if pk is not None:
+            music = MusicModel.objects.filter(id=pk)
+            if not music.exists():
+                data = {'error': 'Music selected does not exist'}
+                return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+            music = MusicModel.objects.get(id=pk)
+            serializer = MusicSerializer(music)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        musics = MusicModel.objects.all()
+        serializer = MusicSerializer(musics, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ArtistViewSet(viewsets.ModelViewSet):
-    queryset = ArtistModel.objects.all().order_by('name')
-    serializer_class = ArtistSerializer
+class ArtistAPIView(APIView):
+    """
+    API que provê os artistas
+    """
+
+    def get(self, request, pk=None):
+        # Caso o id não seja nulo, significa que é para retornar apenas a música selecionada
+        if pk is not None:
+            artist = ArtistModel.objects.filter(id=pk)
+            if not artist.exists():
+                data = {'error': 'Artist selected does not exist'}
+                return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+            artist = ArtistModel.objects.get(id=pk)
+            serializer = ArtistSerializer(artist)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        artists = ArtistModel.objects.all()
+        serializer = ArtistSerializer(artists, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class PlaylistViewSet(viewsets.ModelViewSet):
-    queryset = PlaylistModel.objects.all()
-    serializer_class = PlaylistSerializer
+
+class PlaylistAPIView(APIView):
+    """
+    API que provê as playlists
+    """
+
+    def get(self, request, pk=None):
+        # Caso o id não seja nulo, significa que é para retornar apenas a música selecionada
+        if pk is not None:
+            playlist = PlaylistModel.objects.filter(id=pk)
+            if not playlist.exists():
+                data = {'error': 'Playlist selected does not exist'}
+                return Response(data=data, status=status.HTTP_404_NOT_FOUND)
+
+            playlist = PlaylistModel.objects.get(id=pk)
+            serializer = PlaylistSerializer(playlist)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        playlists = PlaylistModel.objects.all()
+        serializer = PlaylistSerializer(playlists, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
