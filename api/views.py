@@ -61,6 +61,16 @@ class MusicAPIView(APIView):
         music.save()
         return Response(status=status.HTTP_200_OK)
 
+    def delete(self, request, pk):
+        music = MusicModel.objects.filter(id=pk)
+
+        if music.exists():
+            music = MusicModel.objects.get(id=pk)
+            music.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class ArtistAPIView(APIView):
     """
@@ -104,6 +114,16 @@ class ArtistAPIView(APIView):
 
         artist.save()
         return Response(status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        artist = ArtistModel.objects.filter(id=pk)
+
+        if artist.exists():
+            artist = ArtistModel.objects.get(id=pk)
+            artist.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class PlaylistAPIView(APIView):
@@ -152,3 +172,13 @@ class PlaylistAPIView(APIView):
 
         playlist.save()
         return Response(status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        playlist = PlaylistModel.objects.filter(id=pk)
+
+        if playlist.exists():
+            playlist = PlaylistModel.objects.get(id=pk)
+            playlist.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
