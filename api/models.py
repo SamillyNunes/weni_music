@@ -13,7 +13,7 @@ class MusicModel(models.Model):
     artist = models.ForeignKey(ArtistModel, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return f'{self.title}, {self.artist.name}'
 
 
 class PlaylistModel(models.Model):

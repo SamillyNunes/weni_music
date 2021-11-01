@@ -36,6 +36,31 @@ class MusicAPIView(APIView):
 
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+    def put(self, request, pk):
+        # Pegando a musica pelo id passado pelo endpoint
+        music = MusicModel.objects.get(id=pk)
+
+        # Facilitando o acesso aos dados da requisição, atribuindo-os a variavel data
+        data = request.data
+
+        if "title" in data.keys():
+            music.title = data["title"]
+        if "artist" in data.keys():
+            # filtrando os artistas que tem o id solicitado
+            artist = ArtistModel.objects.filter(id=data["artist"])
+
+            # se existir algum registro, pega esse registro e atualiza
+            if artist.exists():
+                artist = ArtistModel.objects.get(id=data["artist"])
+                music.artist = artist
+            # Se nao existir, manda uma requisicao com 404 erro
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Salvando a instância atualizada
+        music.save()
+        return Response(status=status.HTTP_200_OK)
+
 
 class ArtistAPIView(APIView):
     """
@@ -67,6 +92,19 @@ class ArtistAPIView(APIView):
 
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
+    def put(self, request, pk):
+        # Pegando o artista pelo id passado pelo endpoint
+        artist = ArtistModel.objects.get(id=pk)
+
+        # Facilitando o acesso aos dados da requisição, atribuindo-os a variavel data
+        data = request.data
+
+        if "name" in data.keys():
+            artist.name = data["name"]
+
+        artist.save()
+        return Response(status=status.HTTP_200_OK)
+
 
 class PlaylistAPIView(APIView):
     """
@@ -97,3 +135,20 @@ class PlaylistAPIView(APIView):
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+    def put(self, request, pk):
+        # Pegando a playlist pelo id passado pelo endpoint
+        playlist = PlaylistModel.objects.get(id=pk)
+        print("Playlist founded: ", playlist)
+
+        # Facilitando o acesso aos dados da requisição, atribuindo-os a variavel data
+        data = request.data
+
+        print("data.keys: ", data.keys())
+        if "musics" in data.keys():
+            print("hey!")
+            print("data[musics]: ", data["musics"])
+            playlist.musics.set(data["musics"])
+
+        playlist.save()
+        return Response(status=status.HTTP_200_OK)
