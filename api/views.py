@@ -27,6 +27,15 @@ class MusicAPIView(APIView):
         serializer = MusicSerializer(musics, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        serializer = MusicSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
 
 class ArtistAPIView(APIView):
     """
@@ -49,6 +58,14 @@ class ArtistAPIView(APIView):
         serializer = ArtistSerializer(artists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        serializer = ArtistSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 class PlaylistAPIView(APIView):
@@ -71,3 +88,12 @@ class PlaylistAPIView(APIView):
         playlists = PlaylistModel.objects.all()
         serializer = PlaylistSerializer(playlists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = PlaylistSerializer(data=request.data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
