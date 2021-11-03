@@ -1,4 +1,3 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
 from .models import MusicModel, ArtistModel, PlaylistModel
 
@@ -276,7 +275,7 @@ class PlaylistTest(APITestCase):
         # Criando dados ficticios
 
         data = {
-            'musics': [1,3]
+            'musics': [1, 3]
         }
 
         response = self.client.post(self.url, data=data)
