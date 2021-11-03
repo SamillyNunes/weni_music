@@ -31,4 +31,6 @@ urlpatterns = [
     path('artists/<int:pk>/', ArtistAPIView.as_view(), name='artists'),
     path('playlists/', PlaylistAPIView.as_view(), name='playlists'),
     path('playlists/<int:pk>/', PlaylistAPIView.as_view(), name='playlists'),
+
+
 ]

@@ -11,8 +11,7 @@ class MusicAPIView(APIView):
     API que provê as músicas
     """
 
-    @staticmethod
-    def get(request, pk=None):
+    def get(self, request, pk=None):
         """
         Retorna uma música só, a partir de um id especificado (pk = primary key), ou todas as músicas
         """
@@ -37,7 +36,6 @@ class MusicAPIView(APIView):
         serializer = MusicSerializer(musics, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
     def post(self, request):
         """
         Envia músicas para a API
@@ -54,7 +52,6 @@ class MusicAPIView(APIView):
         # Se a serialização não for válida, retorna o status não aceitável (406)
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    @staticmethod
     def put(self, request, pk):
         """
         Atualiza uma música da API a partir de um id no endpoint
@@ -84,7 +81,6 @@ class MusicAPIView(APIView):
         music.save()
         return Response(status=status.HTTP_200_OK)
 
-    @staticmethod
     def delete(self, request, pk):
         """
         Deleta uma música a partir do id passado no endpoint
@@ -107,7 +103,6 @@ class ArtistAPIView(APIView):
     API que provê os artistas
     """
 
-    @staticmethod
     def get(self, request, pk=None):
         """
         Retorna um artista só, a partir de um id especificado (pk = primary key), ou todos os artistas
@@ -127,7 +122,6 @@ class ArtistAPIView(APIView):
         serializer = ArtistSerializer(artists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
     def post(self, request):
         """
         Envia um artista para o banco de dados
@@ -141,7 +135,6 @@ class ArtistAPIView(APIView):
 
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    @staticmethod
     def put(self, request, pk):
         """
         Atualiza um artista no banco de dados
@@ -159,7 +152,6 @@ class ArtistAPIView(APIView):
         artist.save()
         return Response(status=status.HTTP_200_OK)
 
-    @staticmethod
     def delete(self, request, pk):
         """
         Deleta um artista do banco de dados
@@ -180,7 +172,6 @@ class PlaylistAPIView(APIView):
     API que provê as playlists
     """
 
-    @staticmethod
     def get(self, request, pk=None):
         """
         Retorna uma playlist só, a partir de um id especificado (pk = primary key), ou todas as playlists
@@ -200,7 +191,6 @@ class PlaylistAPIView(APIView):
         serializer = PlaylistSerializer(playlists, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
     def post(self, request):
         """
         Envia uma playlist para o banco de dados
@@ -214,7 +204,6 @@ class PlaylistAPIView(APIView):
 
         return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    @staticmethod
     def put(self, request, pk):
         """
         Atualiza uma playlist
@@ -232,7 +221,6 @@ class PlaylistAPIView(APIView):
         playlist.save()
         return Response(status=status.HTTP_200_OK)
 
-    @staticmethod
     def delete(self, request, pk):
         """
         Deleta um artista no banco de dados
