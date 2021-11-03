@@ -52,7 +52,7 @@ class MusicAPIView(APIView):
                 'artist': openapi.Schema(type=openapi.TYPE_INTEGER, description='Id do artista')
             }
         ),
-        responses={201: 'Created', 406: 'Not acceptable'}
+        responses={201: 'Created', 400: 'Bad request'}
     )
     def post(self, request):
         """
@@ -67,8 +67,8 @@ class MusicAPIView(APIView):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
 
-        # Se a serialização não for válida, retorna o status não aceitável (406)
-        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        # Se a serialização não for válida
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -85,6 +85,11 @@ class MusicAPIView(APIView):
         """
         Atualiza uma música da API a partir de um id no endpoint
         """
+
+        music = MusicModel.objects.filter(id=pk)
+
+        if not music.exists():
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Pegando a musica pelo id passado pelo endpoint
         music = MusicModel.objects.get(id=pk)
@@ -166,7 +171,7 @@ class ArtistAPIView(APIView):
                 'name': openapi.Schema(type=openapi.TYPE_STRING, description='Nome do artista'),
             }
         ),
-        responses={201: 'Created', 406: 'Not acceptable'}
+        responses={201: 'Created', 404: 'Bad request'}
     )
     def post(self, request):
         """
@@ -179,7 +184,7 @@ class ArtistAPIView(APIView):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
 
-        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -189,12 +194,17 @@ class ArtistAPIView(APIView):
                 'name': openapi.Schema(type=openapi.TYPE_STRING, description='Nome do artista'),
             }
         ),
-        responses={200: 'Ok'}
+        responses={200: 'Ok', 404: 'Not found'}
     )
     def put(self, request, pk):
         """
         Atualiza um artista no banco de dados
         """
+
+        artist = ArtistModel.objects.filter(id=pk)
+
+        if not artist.exists():
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Pegando o artista pelo id passado pelo endpoint
         artist = ArtistModel.objects.get(id=pk)
@@ -266,7 +276,7 @@ class PlaylistAPIView(APIView):
                 ),
             }
         ),
-        responses={201: 'Created', 406: 'Not acceptable'}
+        responses={201: 'Created', 400: 'Bad Request'}
     )
     def post(self, request):
         """
@@ -279,7 +289,7 @@ class PlaylistAPIView(APIView):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
 
-        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         request_body=openapi.Schema(
@@ -293,12 +303,17 @@ class PlaylistAPIView(APIView):
                 ),
             }
         ),
-        responses={201: 'Created', 406: 'Not acceptable'}
+        responses={201: 'Created', 404: 'Not acceptable'}
     )
     def put(self, request, pk):
         """
         Atualiza uma playlist
         """
+
+        playlist = PlaylistModel.objects.filter(id=pk)
+
+        if not playlist.exists():
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Pegando a playlist pelo id passado pelo endpoint
         playlist = PlaylistModel.objects.get(id=pk)
